@@ -1,8 +1,9 @@
 class Scrap:
+    id = 0
+
     def __init__(
         self,
-        property_id,
-        paths,
+        path,
         categories_eng,
         categories_esp,
         categories_port,
@@ -19,8 +20,9 @@ class Scrap:
         link,
         media,
     ):
-        self.PropertyID = property_id
-        self.Paths = paths
+        Scrap.id += 1
+        self.PropertyID = "TOOLS_" + str(Scrap.id).zfill(5)
+        self.Paths = path
         self.CategoriesENG = categories_eng
         self.CategoriesESP = categories_esp
         self.CategoriesPORT = categories_port
