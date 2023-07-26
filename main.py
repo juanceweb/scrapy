@@ -15,7 +15,7 @@ def main():
 
         if 1 <= choice <= 3:
             if choice == 1:
-                scrap(4)
+                scrap()
                 print("Finalizo la creacion/actualizacion del Excel")
 
             if choice == 2:

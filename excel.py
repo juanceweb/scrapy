@@ -14,7 +14,7 @@ def crear_diccionario_en_excel(instancia_diccionario, nombre_archivo):
     # Guardar el DataFrame en un archivo Excel
     df.to_excel(nombre_archivo, index=False)
 
-    print(f"Se creo el Excel, junto con una nueva fila")
+    # print(f"Se creo el Excel, junto con una nueva fila")
 
 
 def obtener_ultima_fila_con_informacion(nombre_archivo, nombre_columna):
@@ -48,7 +48,7 @@ def guardar_diccionario_en_excel(instancia_diccionario, nombre_archivo):
     # Guardar el DataFrame actualizado en el archivo Excel
     df_final.to_excel(nombre_archivo, index=False)
 
-    print(f"Se creo una nueva fila del Excel")
+    # print(f"Se creo una nueva fila del Excel")
 
 
 def actualizar_fila_excel(fila, nueva_data, nombre_archivo):
@@ -71,7 +71,7 @@ def actualizar_fila_excel(fila, nueva_data, nombre_archivo):
         # Guardar los cambios en el archivo Excel
         book.save(nombre_archivo)
 
-        print(f"Se actualizo la fila {fila} del Excel")
+        # print(f"Se actualizo la fila {fila} del Excel")
 
     except FileNotFoundError:
         print("El archivo Excel no se encuentra.")
