@@ -1,5 +1,6 @@
 from scrap import scrap
 from json_gen import excel_a_json
+from categories import cat_faltan
 
 
 def main():
@@ -17,6 +18,7 @@ def main():
             if choice == 1:
                 scrap()
                 print("Finalizo la creacion/actualizacion del Excel")
+                print(cat_faltan)
 
             if choice == 2:
                 excel_a_json("tools.xlsx", "tools.json")

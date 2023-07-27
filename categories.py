@@ -168,6 +168,8 @@ lista_categorias_portugues = [
     "moda",
 ]
 
+cat_faltan = set()
+
 
 def encontrar_palabras_especificas(texto_largo, palabras_a_encontrar):
     # Usamos una expresión regular para buscar todas las ocurrencias de las palabras
@@ -181,320 +183,221 @@ def encontrar_palabras_especificas(texto_largo, palabras_a_encontrar):
     return coincidencias
 
 
-faltan = set()
-
-
 def generar_paths_y_categories(categories, description):
-    path = set()
-
     categories_set = set()
-
     categories_set.add("AI")
+
+    path = set()
 
     for categ in categories:
         cat = categ["categoryName"]
 
-        if cat == "image generator":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            categories_set.add("image")
-            categories_set.add("generators")
-            path.add("MARKETING")
-            path.add("ARTS")
-            path.add("DESIGN")
+        match cat:
+            case "image generator":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.update(["image", "generators"])
+                path.update(["MARKETING", "ARTS", "DESIGN"])
 
-        elif cat == "art":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            categories_set.add("generators")
-            categories_set.add("inspirations")
-            path.add("ARTS")
+            case "art":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.update(["generators", "inspirations"])
+                path.add("ARTS")
 
-        elif cat == "developer tools":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            categories_set.add("code")
-            path.add("TECH")
+            case "developer tools":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.add("code")
+                path.add("TECH")
 
-        elif cat == "gaming":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            categories_set.add("games")
-            path.add("TECH")
-            path.add("MARKETING")
-            path.add("ARTS")
-            path.add("DESIGN")
+            case "gaming":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.update(["games"])
+                path.update(["TECH", "MARKETING", "ARTS", "DESIGN"])
 
-        elif cat == "avatars":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            path.add("TECH")
-            path.add("MARKETING")
-            path.add("ARTS")
-            path.add("DESIGN")
+            case "avatars":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                path.update(["TECH", "MARKETING", "ARTS", "DESIGN"])
 
-        elif cat == "fun tools":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            path.add("TECH")
-            path.add("MARKETING")
-            path.add("ARTS")
+            case "fun tools":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                path.update(["TECH", "MARKETING", "ARTS"])
 
-        elif cat == "video generator":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            categories_set.add("generators")
-            categories_set.add("media")
-            categories_set.add("content")
-            categories_set.add("editors")
-            path.add("MARKETING")
+            case "video generator":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.update(["generators", "media", "content", "editors"])
+                path.add("MARKETING")
 
-        elif cat == "image editing":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            categories_set.add("generators")
-            categories_set.add("image")
-            categories_set.add("content")
-            categories_set.add("media")
-            categories_set.add("social")
-            path.add("MARKETING")
-            path.add("ARTS")
-            path.add("DESIGN")
+            case "video generator":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.update(["generators", "media", "content", "editors"])
+                path.add("MARKETING")
 
-        elif cat == "3D":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            categories_set.add("3D")
-            categories_set.add("cinema")
-            path.add("TECH")
-            path.add("ARTS")
-            path.add("DESIGN")
+            case "image editing":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.update(
+                    ["generators", "image", "content", "media", "social"]
+                )
+                path.update(["DESIGN", "MARKETING", "ARTS"])
 
-        elif cat == "resources":
-            finded = encontrar_palabras_especificas(
-                description,
-                lista_categorias,
-            )
-            for cat in finded:
-                categories_set.add(cat.strip())
-            path.add("TECH")
+            case "3D":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                categories_set.update(["3D", "cinema"])
+                path.update(["TECH", "DESIGN", "ARTS"])
 
-        elif cat == "startup tools":
-            categories_set.add("entrepreneur")
-            categories_set.add("investing")
-            path.add("BUSINESS")
-            path.add("PRODUCT")
+            case "resources":
+                finded = encontrar_palabras_especificas(description, lista_categorias)
+                categories_set.update(cat.strip() for cat in finded)
+                path.add("TECH")
 
-        elif cat == "audio editing":
-            categories_set.add("audio")
-            categories_set.add("media")
-            categories_set.add("video")
-            path.add("MARKETING")
-            path.add("ARTS")
+            case "startup tools":
+                categories_set.update(["entrepreneur", "investing"])
+                path.update(["BUSINESS", "PRODUCT"])
 
-        elif cat == "customer support":
-            categories_set.add("communication")
-            path.add("SOFT SKILLS")
+            case "audio editing":
+                categories_set.update(["audio", "media", "video"])
+                path.update(["MARKETING", "ARTS"])
 
-        elif cat == "personalized videos":
-            categories_set.add("media")
-            categories_set.add("content")
-            categories_set.add("video")
-            categories_set.add("social")
-            path.add("MARKETING")
-            path.add("ARTS")
+            case "customer support":
+                categories_set.add("communication")
+                path.add("SOFT SKILLS")
 
-        elif cat == "education assistant":
-            categories_set.add("communication")
-            path.add("SOFT SKILLS")
+            case "personalized videos":
+                categories_set.update(["media", "content", "video", "social"])
+                path.update(["MARKETING", "ARTS"])
 
-        elif cat == "code assistant":
-            categories_set.add("code")
-            path.add("TECH")
+            case "education assistant":
+                categories_set.add("communication")
+                path.add("SOFT SKILLS")
 
-        elif cat == "e-commerce":
-            categories_set.add("e-commerce")
-            path.add("MARKETING")
+            case "code assistant":
+                categories_set.add("code")
+                path.add("TECH")
 
-        elif cat == "email assistant":
-            path.add("MARKETING")
+            case "e-commerce":
+                categories_set.add("e-commerce")
+                path.add("MARKETING")
 
-        elif cat == "text to speech":
-            categories_set.add("communication")
-            path.add("MARKETING")
+            case "email assistant":
+                path.add("MARKETING")
 
-        elif cat == "prompts":
-            categories_set.add("code")
-            path.add("TECH")
-            path.add("DATA")
+            case "text to speech":
+                categories_set.add("communication")
+                path.add("MARKETING")
 
-        elif cat == "finance":
-            categories_set.add("finance")
-            path.add("BUSINESS")
+            case "prompts":
+                categories_set.add("code")
+                path.update(["TECH", "DATA"])
 
-        elif cat == "presentations":
-            categories_set.add("communication")
-            path.add("SOFT SKILLS")
+            case "finance":
+                categories_set.add("finance")
+                path.add("BUSINESS")
 
-        elif cat == "video editing":
-            categories_set.add("media")
-            categories_set.add("video")
-            path.add("MARKETING")
-            path.add("ARTS")
+            case "presentations":
+                categories_set.add("communication")
+                path.add("SOFT SKILLS")
 
-        elif cat == "human resources":
-            categories_set.add("HR")
-            path.add("SOFT SKILLS")
+            case "video editing":
+                categories_set.update(["media", "video"])
+                path.update(["MARKETING", "ARTS"])
 
-        elif cat == "fitness":
-            path.add("TECH")
-            path.add("SOFT SKILLS")
+            case "human resources":
+                categories_set.add("HR")
+                path.add("SOFT SKILLS")
 
-        elif cat == "social media assistant":
-            categories_set.add("social")
-            path.add("MARKETING")
+            case "fitness":
+                path.update(["TECH", "SOFT SKILLS"])
 
-        elif cat == "general writing":
-            categories_set.add("copywriting")
-            categories_set.add("cinema")
-            path.add("MARKETING")
-            path.add("ARTS")
+            case "social media assistant":
+                categories_set.add("social")
+                path.add("MARKETING")
 
-        elif cat == "storytelling":
-            categories_set.add("copywriting")
-            categories_set.add("cinema")
-            path.add("MARKETING")
-            path.add("ARTS")
+            case "general writing":
+                categories_set.update(["copywriting", "cinema"])
+                path.update(["MARKETING", "ARTS"])
 
-        elif cat == "design assistant":
-            path.add("DESIGN")
-            path.add("TECH")
+            case "story teller":
+                categories_set.update(["copywriting", "cinema"])
+                path.update(["MARKETING", "ARTS"])
 
-        elif cat == "search engine":
-            path.add("TECH")
+            case "design assistant":
+                path.update(["DESIGN", "TECH"])
 
-        elif cat == "music":
-            categories_set.add("video")
-            categories_set.add("audio")
-            path.add("ARTS")
-            path.add("MARKETING")
+            case "search engine":
+                path.add("TECH")
 
-        elif cat == "spreadsheets":
-            path.add("DATA")
+            case "music":
+                categories_set.update(["video", "audio"])
+                path.update(["ARTS", "MARKETING"])
 
-        elif cat == "low-code/no-code":
-            categories_set.add("no code")
-            path.add("PRODUCT")
+            case "spreadsheets":
+                path.add("DATA")
 
-        elif cat == "copywriting":
-            categories_set.add("copywriting")
-            categories_set.add("cinema")
-            path.add("MARKETING")
-            path.add("ARTS")
+            case "low-code/no-code":
+                categories_set.add("no code")
+                path.add("PRODUCT")
 
-        elif cat == "life assistant":
-            path.add("TECH")
+            case "copywriting":
+                categories_set.update(["copywriting", "cinema"])
+                path.update(["MARKETING", "ARTS"])
 
-        elif cat == "transcriber":
-            path.add("DATA")
+            case "life assistant":
+                path.add("TECH")
 
-        elif cat == "logo generator":
-            categories_set.add("generators")
-            categories_set.add("image")
-            path.add("DESIGN")
+            case "transcriber":
+                path.add("DATA")
 
-        elif cat == "research":
-            categories_set.add("database")
-            categories_set.add("analytics")
-            path.add("DATA")
+            case "logo generator":
+                categories_set.update(["generators", "image"])
+                path.add("DESIGN")
 
-        elif cat == "SEO":
-            categories_set.add("SEO")
-            path.add("MARKETING")
+            case "research":
+                categories_set.update(["database", "analytics"])
+                path.add("DATA")
 
-        elif cat == "SQL":
-            categories_set.add("code")
-            categories_set.add("database")
-            path.add("TECH")
+            case "SEO":
+                categories_set.add("SEO")
+                path.add("MARKETING")
 
-        elif cat == "sales":
-            categories_set.add("accounting")
-            path.add("BUSINESS")
+            case "SQL":
+                categories_set.update(["code", "database"])
+                path.add("TECH")
 
-        elif cat == "productivity":
-            categories_set.add("productivity")
-            path.add("PRODUCT")
-            path.add("SOFT SKILLS")
+            case "sales":
+                categories_set.add("accounting")
+                path.add("BUSINESS")
 
-        elif cat == "healthcare":
-            path.add("SOFT SKILLS")
+            case "productivity":
+                categories_set.add("productivity")
+                path.update(["PRODUCT", "SOFT SKILLS"])
 
-        elif cat == "dating":
-            categories_set.add("social")
-            path.add("MARKETING")
+            case "healthcare":
+                path.add("SOFT SKILLS")
 
-        elif cat == "fashion":
-            categories_set.add("fashion")
-            path.add("DESIGN")
+            case "dating":
+                categories_set.add("social")
+                path.add("MARKETING")
 
-        elif (
-            cat == "summarizer"
-            or cat == "religion"
-            or cat == "experiments"
-            or cat == "real estate"
-            or cat == "paraphraser"
-            or cat == "gift ideas"
-            or cat == "travel"
-            or cat == "memory"
-            or cat == "legal assistant"
-        ):
-            pass
+            case "fashion":
+                categories_set.add("fashion")
+                path.add("DESIGN")
 
-        # else:
-        #     faltan.add(cat)
+            case "summarizer", "religion", "experiments", "real estate", "paraphraser", "gift ideas", "travel", "memory", "legal assistant":
+                pass
 
-    path = list(path)
+            case _:  # Caso por defecto si no coincide con ninguno de los casos anteriores
+                cat_faltan.add(cat)
 
     categories_list = list(categories_set)
-
     categories_esp_list = ["IA"]
-
     categories_port_list = ["IA"]
 
     for category in categories_list:
@@ -503,4 +406,4 @@ def generar_paths_y_categories(categories, description):
             categories_esp_list.append(lista_categorias_espanol[indice])
             categories_port_list.append(lista_categorias_portugues[indice])
 
-    return path, categories_list, categories_esp_list, categories_port_list
+    return list(path), categories_list, categories_esp_list, categories_port_list
