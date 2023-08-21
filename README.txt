@@ -1,0 +1,16 @@
+# INSTALACION EN MAC
+
+# INSTALAMOS PARA CREAR ENTORNOS VIRTUALES
+pip install virtualenv
+
+# CREACION DE VENV (ENTORNO VIRTUAL)
+virtualenv venv
+
+# ACTIVACION CE ENTORNO VIRTUAL
+source venv/bin/activate
+
+# CON EL ENTORNO ACTIVADO, DESCARGAMOS LOS REQUIREMENTS
+pip install -r requirements.txt
+
+# CORRER PROGRAMA
+python3 main.py
