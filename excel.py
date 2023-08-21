@@ -1,4 +1,6 @@
 import os
+import math
+import ast
 import pandas as pd
 from openpyxl import load_workbook
 
@@ -13,8 +15,6 @@ def crear_diccionario_en_excel(instancia_diccionario, nombre_archivo):
     df = df.reindex(columns=list(instancia_diccionario["column_1"].keys()))
     # Guardar el DataFrame en un archivo Excel
     df.to_excel(nombre_archivo, index=False)
-
-    # print(f"Se creo el Excel, junto con una nueva fila")
 
 
 def obtener_ultima_fila_con_informacion(nombre_archivo, nombre_columna):
@@ -48,13 +48,10 @@ def guardar_diccionario_en_excel(instancia_diccionario, nombre_archivo):
     # Guardar el DataFrame actualizado en el archivo Excel
     df_final.to_excel(nombre_archivo, index=False)
 
-    # print(f"Se creo una nueva fila del Excel")
-
 
 def actualizar_fila_excel(fila, nueva_data, nombre_archivo):
+    fila += 2
     try:
-        fila += 2
-
         # Cargar el archivo Excel existente
         book = load_workbook(nombre_archivo)
 
@@ -71,28 +68,74 @@ def actualizar_fila_excel(fila, nueva_data, nombre_archivo):
         # Guardar los cambios en el archivo Excel
         book.save(nombre_archivo)
 
-        # print(f"Se actualizo la fila {fila} del Excel")
-
     except FileNotFoundError:
         print("El archivo Excel no se encuentra.")
     except Exception as e:
         print("Error al procesar el archivo Excel:", e)
 
 
-def verificar_nombre_existente(instancia_diccionario, nombre_archivo):
+def verificar_existente_identico(
+    name,
+    path,
+    cat_eng,
+    desc_eng,
+    prices_mod,
+    price,
+    key_eng,
+    web,
+    media_link,
+    nombre_archivo,
+):
     try:
         df = pd.read_excel(nombre_archivo)
 
-        nombre_existente = df.loc[df["Name"] == instancia_diccionario["Name"]]
+        lista_tools = df["Name"].tolist()
 
-        filas = nombre_existente.index.to_list()
+        try:
+            indice = lista_tools.index(name)
+            fila_especifica = df.iloc[indice]
 
-        if len(filas) == 0:
-            guardar_diccionario_en_excel(
-                {"column_1": instancia_diccionario}, nombre_archivo
-            )
-        else:
-            actualizar_fila_excel(filas[0], instancia_diccionario, nombre_archivo)
+            cambios = 0
+
+            if set(ast.literal_eval(fila_especifica["Paths"])) != set(path):
+                cambios = 1
+
+            elif set(ast.literal_eval(fila_especifica["CategoriesENG"])) != set(
+                cat_eng
+            ):
+                cambios = 1
+
+            elif fila_especifica["Name"] != name:
+                cambios = 1
+
+            elif fila_especifica["DescriptionEnglish"] != desc_eng:
+                cambios = 1
+
+            elif fila_especifica["Prices"] != prices_mod:
+                if math.isnan(fila_especifica["Prices"]) and prices_mod == "":
+                    pass
+                else:
+                    cambios = 1
+
+            elif set(ast.literal_eval(fila_especifica["BusinessModel"])) != set(price):
+                cambios = 1
+
+            elif set(ast.literal_eval(fila_especifica["KeywordsENG"])) != set(key_eng):
+                cambios = 1
+
+            elif fila_especifica["Link"] != web:
+                cambios = 1
+
+            elif fila_especifica["Media"] != media_link:
+                cambios = 1
+
+            if cambios == 0:
+                return "EXISTE SIN CAMBIOS", False
+            else:
+                return "CAMBIOS", indice
+
+        except Exception as e:
+            return "NO EXISTE", False
 
     except FileNotFoundError:
         print("El archivo Excel no se encuentra.")

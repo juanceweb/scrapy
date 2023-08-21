@@ -168,8 +168,6 @@ lista_categorias_portugues = [
     "moda",
 ]
 
-cat_faltan = set()
-
 
 def encontrar_palabras_especificas(texto_largo, palabras_a_encontrar):
     # Usamos una expresión regular para buscar todas las ocurrencias de las palabras
@@ -390,20 +388,28 @@ def generar_paths_y_categories(categories, description):
                 categories_set.add("fashion")
                 path.add("DESIGN")
 
-            case "summarizer", "religion", "experiments", "real estate", "paraphraser", "gift ideas", "travel", "memory", "legal assistant":
+            case "summarizer", "religion", "experiments", "real estate", "paraphraser":
                 pass
 
-            case _:  # Caso por defecto si no coincide con ninguno de los casos anteriores
-                cat_faltan.add(cat)
+            case "gift ideas", "travel", "memory", "legal assistant":
+                pass
+
+            case _:
+                pass
 
     categories_list = list(categories_set)
+
+    return list(path), categories_list
+
+
+def generar_categories_esp_port(cat_eng: list):
     categories_esp_list = ["IA"]
     categories_port_list = ["IA"]
 
-    for category in categories_list:
+    for category in cat_eng:
         if category != "AI":
-            indice = lista_categorias.index(category)
+            indice = cat_eng.index(category)
             categories_esp_list.append(lista_categorias_espanol[indice])
             categories_port_list.append(lista_categorias_portugues[indice])
 
-    return list(path), categories_list, categories_esp_list, categories_port_list
+    return categories_esp_list, categories_port_list

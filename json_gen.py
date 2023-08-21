@@ -22,11 +22,22 @@ def parse_array(string):
 def limpiar_datos(dato):
     nuevo = {}
     for x, y in dato.items():
-        z = parse_array(y)
-        if z is not None:
-            nuevo[x] = z
+        if x == "Prices":
+            if y != "":
+                if y[0] == "$":
+                    y = float(y[1:])
+                    nuevo[x] = y
+                else:
+                    y = float(y)
+                    nuevo[x] = y
+            else:
+                nuevo[x] = y
         else:
-            nuevo[x] = y
+            z = parse_array(y)
+            if z is not None:
+                nuevo[x] = z
+            else:
+                nuevo[x] = y
 
     return nuevo
 
